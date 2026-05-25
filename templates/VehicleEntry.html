@@ -1,192 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vehicle Entry</title>
+{% extends 'base.html' %}
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% block content %}
 
-<style>
-body{
-    margin:0;
-    background:white;
-    font-family:Arial, sans-serif;
-}
-
-.navbar-custom{
-    background:grey;
-    padding:5px 15px;
-}
-.navbar-custom .navbar-brand,
-.navbar-custom span{
-    color:whitesmoke;
-    font-size:13px;
-}
-
-.sidebar{
-    background:black;
-    min-height:100vh;
-}
-.sidebar a{
-    display:block;
-    color: whitesmoke;
-    padding:10px 15px;
-    font-size:13px;
-    text-decoration:none;
-}
-.sidebar a:hover,
-.sidebar .active{
-    background:grey;
-    color:white;
-}
-
-.card{
-    margin-bottom:20px;
-}
-
-.table td, 
-.table th{
-    white-space: nowrap;
-    font-size:12px;
-}
-
-.badge-green{
-    background:green;
-    color:white;
-    padding:3px 8px;
-    border-radius:5px;
-}
-
-.badge-blue{
-    background:blue;
-    color:white;
-    padding:5px 10px;
-    border-radius:15px;
-}
-
-.card{
-    height:100%;
-}
-
-.card-header{
-    font-weight:bold;
-}
-
-.table td,
-.table th{
-    vertical-align:middle;
-}
-
-.table td,
-.table th{
-    vertical-align: middle !important;
-    text-align: center;
-}
-
-.table{
-    width:100%;
-}
-
-.table-responsive{
-    overflow-x:auto;
-}
-</style>
-</head>
-
-<body>
-<nav class="navbar navbar-custom d-flex align-items-center">
-    <button class="btn btn-light btn-sm d-md-none mr-2"
-            type="button"
-            data-toggle="collapse"
-            data-target="#sidebarMenu">
-        ☰
-    </button>
-
-    <a class="navbar-brand" href="#">PMS Panel</a>
-
-    <span class="ml-auto">Welcome, Administrator</span>
-    <a href="{% url 'index' %}" class="btn btn-primary btn-sm ml-2">Logout</a>
-</nav>
-
-<div class="container-fluid">
 <div class="row">
-    <div class="col-12 col-md-3 col-lg-2 p-0">
-        <div class="collapse d-md-block sidebar" id="sidebarMenu">
-            <a href="{% url 'dashboard' %}">Dashboard</a>
-            <a href="{% url 'category' %}">Category</a>
-            <a href="{% url 'VehicleEntry' %}"class="active">Vehicle Entry</a>
-            <a href="{% url 'ManageVehicles' %}">Manage Vehicles</a>
-            <a href="{% url 'Reports' %}">Reports</a>
-            <a href="{% url 'search' %}">Search</a>
-            <a href="{% url 'Account Settings' %}">Account Setting</a>
-            <a href="{% url 'index' %}">Logout</a>
-        </div>
-    </div>
-    <div class="col-12 col-md-9 col-lg-10 p-3">
-        <div class="row">
-
-    <!-- Add Vehicle Form -->
-    <div class="col-12 col-lg-7">
-        <div class="card">
-            <div class="card-header">Add Vehicle</div>
-
-            <div class="card-body">
-                <form method="POST">
-                    {% csrf_token %}
-
-                    <div class="form-row">
-                        <div class="col-12 col-md-6 mb-3">
-                            <label>Vehicle Number</label>
-                            {{ form.vehicle_number }}
+            <div class="col-12 col-lg-7">
+                <div class="card">
+                    <div class="card-header">Add Vehicle</div>
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="form-row">
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label>Vehicle Number</label>
+                                    {{ form.vehicle_number }}
+                                </div>
+                                <div class="col-12 col-md-6 mb-3">
+                                    <label>Vehicle Type</label>
+                                    <select name="vehicle_type"
+                                    class="form-control">
+                                    {% for i in form.vehicle_type.field.queryset %}
+                                    <option value="{{ i.id }}">
+                                        {{ i.vehicle_type }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
-
-                        <div class="col-12 col-md-6 mb-3">
-                            <label>Vehicle Type</label>
-                            <select name="vehicle_type"
-                            class="form-control">
-                            {% for i in form.vehicle_type.field.queryset %}
-                            <option value="{{ i.id }}">
-                                {{ i.vehicle_type }}
-                            </option>
-                            {% endfor %}
-                        </select>
+                        <div class="form-group">
+                            <label>Parking Area Number</label>
+                            <input type="text"
+                            class="form-control"
+                            readonly
+                            value="Auto Generated">
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Parking Area Number</label>
-                        <input type="text"
-                        class="form-control"
-                        readonly
-                        value="Auto Generated">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Parking Charge</label>
-                        <input type="text"
-                        class="form-control"
-                        readonly
-                        value="Auto Generated">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block">
-                        Add Vehicle
-                    </button>
-                </form>
+                        <div class="form-group">
+                            <label>Parking Charge</label>
+                            <input type="text"
+                            class="form-control"
+                            readonly
+                            value="Auto Generated">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Add Vehicle
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Vehicle Limitations -->
-    <div class="col-12 col-lg-5">
-        <div class="card">
-            <div class="card-header">Vehicle Limitations</div>
-
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered mb-0">
-                        <tbody>
+        <div class="col-12 col-lg-5">
+            <div class="card">
+                <div class="card-header">Vehicle Limitations</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-0">
+                            <tbody>
                             {% for i in form.vehicle_type.field.queryset %}
                             <tr>
                                 <td>{{ i.vehicle_type }} Limit:</td>
@@ -204,7 +71,6 @@ body{
             </div>
         </div>
     </div>
-
 </div>
         <div class="card">
             <div class="card-header">Current Vehicles</div>
@@ -281,13 +147,6 @@ body{
             </ul>
         </div>
     </div>
-</div>
-</div>
-<div>
-</div>
-</div>
-</div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+
+{% endblock %}
+ 
